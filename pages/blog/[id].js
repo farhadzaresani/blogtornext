@@ -10,7 +10,7 @@ import {
   getAllBlogs,
   getSingleBlogComments,
   getSingleBlogData,
-} from "../../lib/getUsersData";
+} from "../../lib/API's";
 import { useEffect, useState } from "react";
 
 import axios from "axios";
@@ -18,6 +18,7 @@ import { getCookie, hasCookie } from "cookies-next";
 import Rating from "../../components/blog/Rating";
 import CommentSection from "../../components/blog/CommentSection";
 import { useRouter } from "next/router";
+import { Box, Container } from "@mui/material";
 
 export async function getStaticPaths() {
   const blogs = await getAllBlogs();
@@ -107,7 +108,7 @@ const id = (props) => {
         "http://localhost:4000/comment/submit",
         {
           text: cm,
-          blogId: data._id,
+          blogId: blog.data._id,
         },
         {
           headers: { auth: `ut ${cookie}` },
@@ -116,6 +117,7 @@ const id = (props) => {
     },
     onSuccess: (res) => {
       console.log(res);
+      setNewComment("");
     },
     onError: (err) => {
       console.log(err);
@@ -125,13 +127,14 @@ const id = (props) => {
   if (comments.isLoading || blog.isLoading) {
     return <ImageLoader />;
   }
+  console.log("cm", comments);
   // console.log(comments.data);
   // console.log(blog.data);
 
   return (
     <>
-      <div className="bg-cream/80 m-4 p-2 rounded-md ">
-        <h1 className="font-bold m-4">{blog.data.title}</h1>
+      <Box className="bg-[#3C4048]  m-5 p-5 rounded-md ">
+        <h1 className="font-bold text-white m-4">{blog.data.title}</h1>
         <div>
           {/* <Rating
             setRating={setRateNum}
@@ -140,8 +143,8 @@ const id = (props) => {
             rating={rateNum} 
   />*/}
         </div>
-        <p>{blog.data.content}</p>
-      </div>
+        <p className="text-white">{blog.data.content}</p>
+      </Box>
       <div>
         <CommentSection
           setNewComment={setNewComment}

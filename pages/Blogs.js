@@ -1,7 +1,7 @@
 import { QueryClient, useQuery, dehydrate } from "@tanstack/react-query";
 import React from "react";
 import BCard from "../components/blog/BCard";
-import { getAllBlogs } from "../lib/getUsersData";
+import { getAllBlogs } from "../lib/API's";
 
 export async function getServerSideProps(context) {
   const queryClient = new QueryClient();

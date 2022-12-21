@@ -1,7 +1,7 @@
 "use Clinet";
 import React, { useEffect, useState } from "react";
-import { setUser } from "../../reducers/userReducer";
-import { useDispatch } from "react-redux";
+import { setUser, thisUser } from "../../reducers/userReducer";
+import { useDispatch, useSelector } from "react-redux";
 import ProfileHero from "../../components/profile/ProfileHero";
 import { useRouter } from "next/router";
 import EditModal from "../../components/profile/EditModal";
@@ -16,8 +16,46 @@ import { getCookie } from "cookies-next";
 import ImageLoader from "../../components/loader/ImageLoader";
 import { Add } from "iconsax-react";
 import CreateBlog from "../../components/profile/CreateBlog";
-import { getMe, getMyBlogs } from "../../lib/getUsersData";
+import { getMe, getMyBlogs } from "../../lib/API's";
 import BCard from "../../components/blog/BCard";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import { useMemo } from "react";
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
 
 export async function getServerSideProps({ req, res }) {
   const token = getCookie("ut", { req, res });
@@ -44,14 +82,18 @@ const profile = (props) => {
     queryFn: () => getMe(cookie),
     queryKey: ["data"],
   });
+  const cookie = getCookie("ut");
+  const [value, setValue] = React.useState(0);
 
-  const cookie = getCookie("ut", {});
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
   const [onEditProfile, setOnEditProfile] = useState(false);
   const [onEdit, setOnedit] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [newData, setNewData] = useState({
-    name: "",
-    bio: "",
+    name: userData.data?.name,
+    bio: userData.data?.bio,
   });
   const [newAvatar, setNewAvatar] = useState(null);
 
@@ -68,6 +110,9 @@ const profile = (props) => {
       setOnEditProfile(false);
     },
   });
+
+  // const catchedData = useMemo(userData.data, []);
+  console.log(userData.data);
 
   //update profile picture
   const uploadAvatar = useMutation({
@@ -137,71 +182,107 @@ const profile = (props) => {
       setOnedit(false);
     },
   });
+  // const redux = useSelector(thisUser);
+  // console.log("thisuser", redux);
+  // useEffect(() => {
+  //   if (userData.data && userData.data !== newData) {
+  //     setNewData({ name: userData.data.name, bio: userData.data.bio });
+  //   }
+  // }, []);
 
+  console.log("new", posts.data);
   if (posts.isLoading || userData.isLoading) {
     return <ImageLoader />;
   }
   return (
-    <div>
-      {onEditProfile && (
-        <EditModal
-          onEdit={() => editProfile.mutate(cookie)}
-          close={() => setOnEditProfile(false)}
-          data={newData}
-          setData={setNewData}
-          setNewAvatar={setNewAvatar}
-          newAvatar={newAvatar}
-          uploadAvatar={() => submitAvatar(newAvatar)}
-          image={userData.data.avatar}
-        />
-      )}
-      <ProfileHero
-        username={userData.data.username}
-        name={userData.data.name}
-        bio={userData.data.bio}
-        avaragescore={userData.data.avarageScore}
-        createdAt={userData.data.createdAt}
+    <>
+      <Box sx={{ width: "100%" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+          >
+            <Tab label="Profile" {...a11yProps(0)} />
+            <Tab label="Create Blog" {...a11yProps(1)} />
+          </Tabs>
+        </Box>
+        <TabPanel value={value} index={0}>
+          <ProfileHero
+            username={userData.data.username}
+            name={userData.data.name}
+            bio={userData.data.bio}
+            avaragescore={userData.data.avarageScore}
+            createdAt={userData.data.createdAt}
+            image={userData.data.avatar}
+            onEdit={() => setOnEditProfile(true)}
+            logedIn={true}
+          />
+          <div className=" m-12 items-center justify-around flex flex-wrap gap-12  ">
+            {posts.data.length > 0 ? (
+              posts.data.map((blog, i) => {
+                return (
+                  <BCard
+                    key={i}
+                    image={blog.imgurl}
+                    content={blog.content}
+                    name={blog.title}
+                    id={blog._id}
+                    isLogedIn={true}
+                    setOnedit={setOnedit}
+                    onEdit={onEdit}
+                    editBlog={editBlog}
+                    deleteBlog={deleteBlog}
+                  />
+                );
+              })
+            ) : (
+              <h1 className="text-2xl font-extrabold text-[#3C4048]/50 ">
+                There is no post
+              </h1>
+            )}
+          </div>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <CreateBlog
+            title={(e) => setBlogData({ ...blogData, title: e.target.value })}
+            content={(e) =>
+              setBlogData({ ...blogData, content: e.target.value })
+            }
+            action={() => createBlog.mutate(blogData)}
+            closeModal={setOpenCreateModal}
+            discription={"Create new blog!"}
+          />
+        </TabPanel>
+      </Box>
+
+      <EditModal
+        onEdit={() => editProfile.mutate(cookie)}
+        close={() => setOnEditProfile(false)}
+        open={onEditProfile}
+        data={newData}
+        setData={setNewData}
+        setNewAvatar={setNewAvatar}
+        newAvatar={newAvatar}
+        uploadAvatar={() => submitAvatar(newAvatar)}
         image={userData.data.avatar}
-        onEdit={() => setOnEditProfile(true)}
-        logedIn={true}
       />
-      <button
-        onClick={() => setOpenCreateModal(true)}
-        className="bg-green/70 hover:bg-green transition-all duration-300
-       uppercase font-bold px-3 py-1 rounded-md flex m-4 text-charocoal "
-      >
-        Create new blog
-        <Add size="22" variant="Bold" />
-      </button>
-      {openCreateModal && (
-        <CreateBlog
-          title={(e) => setBlogData({ ...blogData, title: e.target.value })}
-          content={(e) => setBlogData({ ...blogData, content: e.target.value })}
-          action={() => createBlog.mutate(blogData)}
-          closeModal={setOpenCreateModal}
-          discription={"Create new blog!"}
-        />
-      )}
-      <div className=" m-12 items-center justify-around flex flex-wrap gap-12  ">
-        {posts.data.map((blog, i) => {
-          return (
-            <BCard
-              key={i}
-              image={blog.imgurl}
-              content={blog.content}
-              name={blog.title}
-              id={blog._id}
-              isLogedIn={true}
-              setOnedit={setOnedit}
-              onEdit={onEdit}
-              editBlog={editBlog}
-              deleteBlog={deleteBlog}
-            />
-          );
-        })}
-      </div>
-    </div>
+    </>
+    // <div>
+
+    //   <button
+    //     onClick={() => setOpenCreateModal(true)}
+    //     className="bg-green/70 hover:bg-green transition-all duration-300
+    //    uppercase font-bold px-3 py-1 rounded-md flex m-4 text-charocoal "
+    //   >
+    //     Create new blog
+    //     <Add size="22" variant="Bold" />
+    //   </button>
+
+    //   <div className=" m-12 items-center justify-around flex flex-wrap gap-12  ">
+
+    //   </div>
+    // </div>
   );
 };
-
 export default profile;

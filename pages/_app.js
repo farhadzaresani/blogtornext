@@ -8,25 +8,44 @@ import {
 } from "@tanstack/react-query";
 import React from "react";
 import Navbar from "../components/layouts/Navbar";
-import { Raleway } from "@next/font/google";
+import Head from "next/head";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-const raleway = Raleway({
-  weight: "400",
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#3C4048",
+    },
+    secondary: {
+      main: "#eeeee",
+    },
+  },
 });
+
 function MyApp({ Component, pageProps }) {
   // const queryClient = new QueryClient();
   const [queryClient] = React.useState(() => new QueryClient());
   return (
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <main className={raleway.className}>
-            <Navbar />
-            <Component {...pageProps} />
-          </main>
-        </Hydrate>
-      </QueryClientProvider>
-    </Provider>
+    <>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+        />
+      </Head>
+      <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <ThemeProvider theme={theme}>
+              <main>
+                <Navbar />
+                <Component {...pageProps} />
+              </main>
+            </ThemeProvider>
+          </Hydrate>
+        </QueryClientProvider>
+      </Provider>
+    </>
   );
 }
 

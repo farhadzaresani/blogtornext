@@ -1,21 +1,23 @@
+import { Button, TextField } from "@mui/material";
 import React from "react";
 
 const CommentSection = (props) => {
   return (
     <div className=" m-5 ">
       <div className="flex gap-1">
-        <input
+        <TextField
           onChange={(e) => props.setNewComment(e.target.value)}
           type={"text"}
+          fullWidth
           placeholder="Write your Comment..."
-          className="p-2 rounded-md w-full bg-white "
+          className="rounded-md bg-white "
         />
-        <button
-          className="bg-blue text-cream font-bold uppercase p-2 rounded-md "
+        <Button
+          className="bg-blue text-white font-bold uppercase p-2 rounded-md "
           onClick={props.post}
         >
           submit
-        </button>
+        </Button>
       </div>
       <div className="flex flex-col gap-1 mt-1 h-24 overflow-auto">
         {props.comments.map((cm, i) => {

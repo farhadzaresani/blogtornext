@@ -1,59 +1,106 @@
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  Button,
+  Card,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  OutlinedInput,
+  Paper,
+} from "@mui/material";
 import React from "react";
 
 const LoginSignup = (props) => {
+  const [showPassword, setShowPassword] = React.useState(false);
   const enterKey = (e) => {
     if (e.key === "Enter") {
       props.submitHandler();
     }
   };
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <div className=" flex min-h-[80vh] h-full w-full">
-      <div
-        className="m-auto  bg-charocoal/30 rounded-md  py-10 px-5 flex flex-col
+      <Card
+        className="m-auto   rounded-md  py-10 px-5 flex flex-col
        gap-10 font-bold  justify-center items-center"
       >
-        <h1 className="text-2xl opacity-80">{props.title}</h1>
+        <h1 className="text-2xl  opacity-80">{props.title}</h1>
         <div className="flex flex-col gap-5">
-          <div className="flex w-full justify-between">
-            <label>{props.firstLabel}</label>
-            <input
+          <FormControl variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">
+              {props.firstLabel}
+            </InputLabel>
+            <OutlinedInput
               onChange={(e) =>
                 props.setUserData({
                   ...props.userData,
                   username: e.target.value,
                 })
               }
-              className="p-1 ml-1 rounded-sm"
+              onKeyDown={enterKey}
+              id="outlined-adornment-password"
               type={"text"}
+              label="username"
             />
-          </div>
-          <div className="flex  w-full justify-between">
-            <label>{props.secondLabel}</label>
+          </FormControl>
+          <div className="flex  justify-between">
             {props.title === "Login" ? (
-              <input
-                onChange={(e) =>
-                  props.setUserData({
-                    ...props.userData,
-                    password: e.target.value,
-                  })
-                }
-                onKeyDown={enterKey}
-                className="p-1 ml-1 rounded-sm"
-                type={"text"}
-              />
+              <>
+                <FormControl variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-password">
+                    {props.secondLabel}
+                  </InputLabel>
+                  <OutlinedInput
+                    onChange={(e) =>
+                      props.setUserData({
+                        ...props.userData,
+                        password: e.target.value,
+                      })
+                    }
+                    onKeyDown={enterKey}
+                    id="outlined-adornment-password"
+                    type={showPassword ? "text" : "password"}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    label="Password"
+                  />
+                </FormControl>
+              </>
             ) : (
-              <input
-                onChange={(e) =>
-                  props.setUserData({
-                    ...props.userData,
-                    name: e.target.value,
-                  })
-                }
-                onKeyDown={enterKey}
-                className="p-1 ml-1 rounded-sm"
-                type={"text"}
-              />
+              <FormControl variant="outlined">
+                <InputLabel htmlFor="outlined-adornment-password">
+                  {props.secondLabel}
+                </InputLabel>
+                <OutlinedInput
+                  onChange={(e) =>
+                    props.setUserData({
+                      ...props.userData,
+                      name: e.target.value,
+                    })
+                  }
+                  onKeyDown={enterKey}
+                  id="outlined-adornment-password"
+                  type={"text"}
+                  label="name"
+                />
+              </FormControl>
             )}
           </div>
           <p
@@ -65,14 +112,15 @@ const LoginSignup = (props) => {
         </div>
 
         <div>
-          <button
+          <Button
+            className="bg-blue"
             onClick={() => props.submitHandler()}
-            className="bg-blue px-3 py-1 active:opacity-70"
+            variant="contained"
           >
             {props.clickTitle}
-          </button>
+          </Button>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

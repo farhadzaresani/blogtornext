@@ -5,7 +5,7 @@ import BCard from "../components/blog/BCard";
 import HomeHero from "../components/homePage/HomeHero";
 import ImageLoader from "../components/loader/ImageLoader";
 import UserCard from "../components/user/UserCard";
-import { getTopBlogs, getTopUsers } from "../lib/getUsersData";
+import { getTopBlogs, getTopUsers } from "../lib/API's";
 import styles from "../styles/Home.module.css";
 
 export async function getServerSideProps(context) {
@@ -46,9 +46,9 @@ export default function Home(props) {
       <main>
         <HomeHero />
         <div className="px-14 ">
-          <h1 className="text-cream font-bold text-xl my-8 ">Top Writers</h1>
+          <h1 className=" font-bold text-xl my-8 ">Top Writers</h1>
           <div className=" flex flex-col md:flex-row gap-10 justify-between lg:mx-20 ">
-            {users.data.map((user, i) => {
+            {users.data?.map((user, i) => {
               return (
                 <UserCard
                   key={i}
@@ -62,7 +62,7 @@ export default function Home(props) {
           </div>
         </div>
         <div className="p-14  ">
-          <h1 className="text-cream font-bold text-xl my-8 ">Top Blogs</h1>
+          <h1 className=" font-bold text-xl my-8 ">Top Blogs</h1>
           <div className=" flex flex-col md:flex-row gap-10 justify-between lg:mx-20 ">
             {blogs.data.map((blog, i) => {
               return (

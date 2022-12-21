@@ -1,6 +1,6 @@
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import UserCard from "../components/user/UserCard";
-import { getUsersData } from "../lib/getUsersData";
+import { getUsersData } from "../lib/API's";
 import ImageLoader from "../components/loader/ImageLoader";
 
 export async function getServerSideProps(context) {

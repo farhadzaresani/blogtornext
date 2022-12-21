@@ -5,18 +5,21 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useMutation } from "@tanstack/react-query";
 import ImageLoader from "../components/loader/ImageLoader";
+import { useDispatch } from "react-redux";
 
 const LoginSignUp = () => {
   const [isCreated, setIsCreated] = useState(true);
   const [userData, setUserData] = useState({ username: "", name: "" });
   const [loginData, setLoginData] = useState();
   const router = useRouter();
+
   const mutationLogin = useMutation({
     mutationFn: async (data) => {
       return await axios.post(`http://localhost:4000/user/login`, data);
     },
     onSuccess: (res) => {
       setCookie("ut", res.data.token, {});
+      setCookie("ut", res.data.token);
       router.push("/dashboard/profile");
       console.log("object");
     },

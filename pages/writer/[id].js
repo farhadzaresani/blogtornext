@@ -3,11 +3,7 @@ import { useRouter } from "next/router";
 import BCard from "../../components/blog/BCard";
 import ImageLoader from "../../components/loader/ImageLoader";
 import ProfileHero from "../../components/profile/ProfileHero";
-import {
-  getSingleUserData,
-  getUserBlogs,
-  getUsersData,
-} from "../../lib/getUsersData";
+import { getSingleUserData, getUserBlogs, getUsersData } from "../../lib/API's";
 
 export async function getStaticProps({ params }) {
   const { id } = params;
@@ -44,9 +40,10 @@ const id = (props) => {
     queryFn: () => getUserBlogs(router.query.id),
     queryKey: ["posts"],
   });
-  if (userData.isLoading) {
+  if (userData.isLoading || posts.isLoading) {
     return <ImageLoader />;
   }
+  console.log(posts.data);
   return (
     <div>
       <ProfileHero
@@ -59,16 +56,22 @@ const id = (props) => {
         logedIn={false}
       />
       <div className=" m-12 items-center justify-around flex flex-wrap gap-12  ">
-        {posts.data.map((blog, i) => {
-          return (
-            <BCard
-              key={i}
-              image={blog.imgurl}
-              content={blog.content}
-              name={blog.title}
-            />
-          );
-        })}
+        {posts.data.length > 0 ? (
+          posts.data.map((blog, i) => {
+            return (
+              <BCard
+                key={i}
+                image={blog.imgurl}
+                content={blog.content}
+                name={blog.title}
+              />
+            );
+          })
+        ) : (
+          <h1 className="text-2xl font-extrabold text-[#3C4048]/50 ">
+            There is no post
+          </h1>
+        )}
       </div>
     </div>
   );

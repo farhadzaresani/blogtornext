@@ -21,9 +21,7 @@ const HomeHero = () => {
         <h1 className="font-bold uppercase text-[2em] md:text-[2.5em]">
           Crate Your Own Blog!
         </h1>
-        <p className="text-cream tracking-widest ">
-          Show to the world what you got😉
-        </p>
+        <p className=" tracking-widest ">Show to the world what you got😉</p>
       </div>
     </div>
   );

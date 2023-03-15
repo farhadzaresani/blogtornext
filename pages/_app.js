@@ -10,14 +10,16 @@ import React from "react";
 import Navbar from "../components/layouts/Navbar";
 import Head from "next/head";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Footer from "../components/layouts/Footer";
 
 const theme = createTheme({
   palette: {
+    mode: "dark",
     primary: {
       main: "#3C4048",
     },
     secondary: {
-      main: "#eeeee",
+      main: "#FF8A65",
     },
   },
 });
@@ -29,8 +31,8 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+          rel='stylesheet'
+          href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
         />
       </Head>
       <Provider store={store}>
@@ -40,6 +42,7 @@ function MyApp({ Component, pageProps }) {
               <main>
                 <Navbar />
                 <Component {...pageProps} />
+                <Footer />
               </main>
             </ThemeProvider>
           </Hydrate>

@@ -26,15 +26,15 @@ const LoginSignup = (props) => {
   };
 
   return (
-    <div className=" flex min-h-[80vh] h-full w-full">
+    <div className=' flex min-h-[80vh] h-full w-full'>
       <Card
-        className="m-auto   rounded-md  py-10 px-5 flex flex-col
-       gap-10 font-bold  justify-center items-center"
+        className='m-auto   rounded-md  py-10 px-5 flex flex-col
+       gap-10 font-bold  justify-center items-center'
       >
-        <h1 className="text-2xl  opacity-80">{props.title}</h1>
-        <div className="flex flex-col gap-5">
-          <FormControl variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">
+        <h1 className='text-2xl  opacity-80'>{props.title}</h1>
+        <div className='flex flex-col gap-5'>
+          <FormControl variant='outlined'>
+            <InputLabel htmlFor='outlined-adornment-password'>
               {props.firstLabel}
             </InputLabel>
             <OutlinedInput
@@ -45,16 +45,16 @@ const LoginSignup = (props) => {
                 })
               }
               onKeyDown={enterKey}
-              id="outlined-adornment-password"
+              id='outlined-adornment-password'
               type={"text"}
-              label="username"
+              label='username'
             />
           </FormControl>
-          <div className="flex  justify-between">
+          <div className='flex  justify-between'>
             {props.title === "Login" ? (
               <>
-                <FormControl variant="outlined">
-                  <InputLabel htmlFor="outlined-adornment-password">
+                <FormControl variant='outlined'>
+                  <InputLabel htmlFor='outlined-adornment-password'>
                     {props.secondLabel}
                   </InputLabel>
                   <OutlinedInput
@@ -65,27 +65,27 @@ const LoginSignup = (props) => {
                       })
                     }
                     onKeyDown={enterKey}
-                    id="outlined-adornment-password"
+                    id='outlined-adornment-password'
                     type={showPassword ? "text" : "password"}
                     endAdornment={
-                      <InputAdornment position="end">
+                      <InputAdornment position='end'>
                         <IconButton
-                          aria-label="toggle password visibility"
+                          aria-label='toggle password visibility'
                           onClick={handleClickShowPassword}
                           onMouseDown={handleMouseDownPassword}
-                          edge="end"
+                          edge='end'
                         >
                           {showPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       </InputAdornment>
                     }
-                    label="Password"
+                    label='Password'
                   />
                 </FormControl>
               </>
             ) : (
-              <FormControl variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password">
+              <FormControl variant='outlined'>
+                <InputLabel htmlFor='outlined-adornment-password'>
                   {props.secondLabel}
                 </InputLabel>
                 <OutlinedInput
@@ -96,16 +96,16 @@ const LoginSignup = (props) => {
                     })
                   }
                   onKeyDown={enterKey}
-                  id="outlined-adornment-password"
+                  id='outlined-adornment-password'
                   type={"text"}
-                  label="name"
+                  label='name'
                 />
               </FormControl>
             )}
           </div>
           <p
             onClick={props.isLoginHandler}
-            className="text-xs cursor-pointer hover:text-blue"
+            className='text-xs cursor-pointer hover:text-blue'
           >
             {props.isLogin}
           </p>
@@ -113,9 +113,10 @@ const LoginSignup = (props) => {
 
         <div>
           <Button
-            className="bg-blue"
+            sx={{ bgcolor: "#FF8A65" }}
+            // color='#FF8A65'
             onClick={() => props.submitHandler()}
-            variant="contained"
+            variant='contained'
           >
             {props.clickTitle}
           </Button>

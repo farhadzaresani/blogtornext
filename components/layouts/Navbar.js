@@ -17,7 +17,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, setUser } from "../../reducers/userReducer";
 import styles from "./Navbar.module.css";
-import { ProfileCircle, Logout, HambergerMenu } from "iconsax-react";
+import { ProfileCircle, Logout, HambergerMenu, Blogger } from "iconsax-react";
 import { deleteCookie, getCookie, hasCookie } from "cookies-next";
 
 const pages = [
@@ -48,15 +48,13 @@ const Navbar = () => {
   const route = useRouter();
   const [isLogedIn, setIsLogedIn] = useState(false);
   const thisUser = useSelector(selectUser);
-  console.log(thisUser);
   const [open, setOpen] = useState(false);
-  // console.log(thisUser);
   const SignOut = () => {
     deleteCookie("ut", {});
     setIsLogedIn(false);
     route.push("/");
   };
-  console.log(isLogedIn);
+
   useEffect(() => {
     const auth = hasCookie("ut");
     if (auth) {
@@ -70,43 +68,44 @@ const Navbar = () => {
     handleCloseUserMenu();
   };
 
-  console.log(route.pathname);
   return (
-    <AppBar position="sticky">
-      <Container maxWidth="xl">
+    <AppBar position='sticky'>
+      <Container maxWidth='xl'>
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            BLOGTOR
-          </Typography>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
+            <Blogger size='32' color='#FF8A65' />
+            <Typography
+              variant='h6'
+              noWrap
+              component='a'
+              href='/'
+              sx={{
+                mr: 2,
+
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              BLOGTOR
+            </Typography>
+          </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
+              size='large'
+              aria-label='account of current user'
+              aria-controls='menu-appbar'
+              aria-haspopup='true'
               onClick={handleOpenNavMenu}
-              color="inherit"
+              color='inherit'
             >
               <MenuIcon />
             </IconButton>
             <Menu
-              id="menu-appbar"
+              id='menu-appbar'
               anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: "bottom",
@@ -125,30 +124,33 @@ const Navbar = () => {
             >
               {pages.map((page) => (
                 <MenuItem key={page.name} onClick={() => goToPage(page.href)}>
-                  <Typography textAlign="center">{page.name}</Typography>
+                  <Typography textAlign='center'>{page.name}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
+          <Box
+            sx={{ width: "100%", display: { xs: "flex", md: "none" }, gap: 2 }}
           >
-            LOGO
-          </Typography>
+            <Blogger size='32' color='#FF8A65' />
+            <Typography
+              variant='h5'
+              noWrap
+              component='a'
+              href=''
+              sx={{
+                mr: 2,
+                flexGrow: 1,
+                fontFamily: "monospace",
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "inherit",
+                textDecoration: "none",
+              }}
+            >
+              BLOGTOR
+            </Typography>
+          </Box>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page, i) => {
               return (
@@ -167,7 +169,7 @@ const Navbar = () => {
             {isLogedIn ? (
               <Tooltip>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
                 </IconButton>
               </Tooltip>
             ) : (
@@ -181,7 +183,7 @@ const Navbar = () => {
             )}
             <Menu
               sx={{ mt: "45px" }}
-              id="menu-appbar"
+              id='menu-appbar'
               anchorEl={anchorElUser}
               anchorOrigin={{
                 vertical: "top",
@@ -196,10 +198,10 @@ const Navbar = () => {
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={() => goToPage("/dashboard/profile")}>
-                <Typography textAlign="center">Dashboard</Typography>
+                <Typography textAlign='center'>Dashboard</Typography>
               </MenuItem>
               <MenuItem onClick={() => SignOut()}>
-                <Typography textAlign="center">SignOut</Typography>
+                <Typography textAlign='center'>SignOut</Typography>
               </MenuItem>
             </Menu>
           </Box>

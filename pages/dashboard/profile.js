@@ -92,9 +92,14 @@ const profile = (props) => {
   const [onEdit, setOnedit] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [newData, setNewData] = useState({
-    name: userData.data?.name,
-    bio: userData.data?.bio,
+    name: "",
+    bio: "",
   });
+  useEffect(() => {
+    if (userData.data) {
+      setNewData({ name: userData.data.name, bio: userData.data.bio });
+    }
+  }, [userData.data]);
   const [newAvatar, setNewAvatar] = useState(null);
 
   //edit Profile data
@@ -106,7 +111,7 @@ const profile = (props) => {
     },
     onSuccess: (res) => {
       console.log(res);
-      getMyData.mutate(cookie);
+      // getMyData.mutate(cookie);
       setOnEditProfile(false);
     },
   });
@@ -127,7 +132,7 @@ const profile = (props) => {
     },
     onSuccess: (res) => {
       console.log(res);
-      getMyData.mutate(cookie);
+      // getMyData.mutate(cookie);
       setOnEditProfile(false);
     },
     onError: (error) => {

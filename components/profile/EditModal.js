@@ -34,7 +34,7 @@ const EditModal = (props) => {
   console.log(props.newAvatar);
 
   const saveChanges = () => {
-    // props.onEdit();
+    props.onEdit();
     if (props.newAvatar) {
       props.uploadAvatar();
     }

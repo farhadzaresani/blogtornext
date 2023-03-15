@@ -3,7 +3,7 @@ import React from "react";
 
 const CommentSection = (props) => {
   return (
-    <div className=" m-5 ">
+    <div className=" my-5 ">
       <div className="flex gap-1">
         <TextField
           onChange={(e) => props.setNewComment(e.target.value)}

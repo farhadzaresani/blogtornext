@@ -1,9 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import CreateBlog from "../profile/CreateBlog";
-import styles from "./Blog.module.css";
-import EditBlog from "./EditBlog";
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -11,6 +7,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { CardMedia, Rating } from "@mui/material";
 
 const BCard = (props) => {
   // const name = props.name[0].toUpperCase() + props.name.slice(1);
@@ -40,24 +37,43 @@ const BCard = (props) => {
     return <ImageLoader />;
   };
   return (
-    <Card className="text-white" sx={{ minWidth: 275, bgcolor: "#3C4048" }}>
+    <Card sx={{ width: 275, height: 300 }}>
       <CardContent>
         <Typography
           sx={{ fontSize: 14, fontWeight: "bold" }}
-          color=""
+          color=''
           gutterBottom
         >
           {props.name}
         </Typography>
-        <Typography
-          className=" text-opacity-30 truncate w-28 "
-          sx={{ mb: 1.5 }}
+
+        <Box
+          sx={{
+            height: "20vh",
+            overflow: "hidden",
+          }}
         >
-          {props.content}...
-        </Typography>
+          <Typography
+            sx={{
+              mb: 1.5,
+              // width: "50%",
+              whiteSpace: "wrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {props.content}
+          </Typography>
+        </Box>
+        <Rating
+          name='half-rating-read'
+          defaultValue={props.score}
+          precision={0.5}
+          readOnly
+        />
       </CardContent>
       <CardActions>
-        <Button className="text-white">
+        <Button className='text-white active:bg-white/50'>
           <Link href={`/blog/${props.id}`}>See More</Link>
         </Button>
       </CardActions>

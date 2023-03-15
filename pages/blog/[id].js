@@ -12,10 +12,9 @@ import {
   getSingleBlogData,
 } from "../../lib/API's";
 import { useEffect, useState } from "react";
-
+import { Button, Rating } from "@mui/material";
 import axios from "axios";
 import { getCookie, hasCookie } from "cookies-next";
-import Rating from "../../components/blog/Rating";
 import CommentSection from "../../components/blog/CommentSection";
 import { useRouter } from "next/router";
 import { Box, Container } from "@mui/material";
@@ -41,10 +40,6 @@ export async function getStaticProps({ params }) {
   await queryClient.fetchQuery(["comment", id], () =>
     getSingleBlogComments(id)
   );
-
-  // const data = await getSingleBlogData(params.id);
-  // const posts = await getSingleBlogComments(params.id);
-  // console.log(params.id);
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
@@ -65,14 +60,8 @@ const id = (props) => {
     queryKey: ["comment"],
   });
 
-  // const comments = useQuery({
-  //   queryFn: () => getSingleBlogComments(props.data._id),
-  //   queryKey: ["posts"],
-  //   initialData: props.posts,
-  // });
-
   const [rateNum, setRateNum] = useState(0);
-  // console.log(rating);
+  console.log(rateNum);
   const cookie = getCookie("ut", {});
   const [isLogedIn, setIsLogedIn] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -87,7 +76,7 @@ const id = (props) => {
       return await axios.post(
         "http://localhost:4000/blog/submit-rate",
         {
-          blogId: data._id,
+          blogId: blog.data._id,
           score: rate,
         },
         {
@@ -133,25 +122,36 @@ const id = (props) => {
 
   return (
     <>
-      <Box className="bg-[#3C4048]  m-5 p-5 rounded-md ">
-        <h1 className="font-bold text-white m-4">{blog.data.title}</h1>
-        <div>
-          {/* <Rating
-            setRating={setRateNum}
-            isLogedIn={isLogedIn}
-            rateBlog={rateBlog}
-            rating={rateNum} 
-  />*/}
-        </div>
-        <p className="text-white">{blog.data.content}</p>
+      <Box className="bg-[#3C4048]  m-5 p-5 pb-0 rounded-md ">
+        <Container className="p-4 text-black bg-white/70 rounded-lg">
+          <h1 className="font-bold  m-4">{blog.data.title}</h1>
+          <div></div>
+          <p className="">{blog.data.content}</p>
+        </Container>
+        <Container className="border-t-[1px] pt-2 mt-2 border-[#eeee]">
+          <Box className="flex  items-center">
+            <Rating
+              name="half-rating-read"
+              defaultValue={props.score}
+              precision={0.5}
+              onChange={(e, value) => {
+                setRateNum(value);
+              }}
+            />
+            <Button
+              onClick={() => rateBlog.mutate(rateNum)}
+              className="bg-blue hover:bg-blue/80 text-white active:bg-green"
+            >
+              Rate
+            </Button>
+          </Box>
+          <CommentSection
+            setNewComment={setNewComment}
+            post={() => enterComment.mutate(newComment)}
+            comments={comments.data}
+          />
+        </Container>
       </Box>
-      <div>
-        <CommentSection
-          setNewComment={setNewComment}
-          post={() => enterComment.mutate(newComment)}
-          comments={comments.data}
-        />
-      </div>
     </>
   );
 };

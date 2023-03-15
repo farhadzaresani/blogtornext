@@ -19,7 +19,7 @@ const Blogs = (props) => {
   });
 
   return (
-    <div className="flex flex-wrap justify-center gap-10 m-10">
+    <div className="flex flex-wrap col-span-2 justify-center gap-10 m-10">
       {data.map((blog, i) => {
         return (
           <BCard

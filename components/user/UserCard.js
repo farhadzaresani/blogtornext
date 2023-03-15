@@ -1,23 +1,15 @@
 import React from "react";
 import Image from "next/image";
-import style from "./User.module.css";
 import Link from "next/link";
-import ImageLoader from "../loader/ImageLoader";
-import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
+
 import Typography from "@mui/material/Typography";
-import { red } from "@mui/material/colors";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+
+import { Rating } from "@mui/material";
+import { Box } from "@mui/system";
+// import { Scale } from "@mui/icons-material";
 
 function UserCard(props) {
   const [expanded, setExpanded] = React.useState(false);
@@ -26,17 +18,29 @@ function UserCard(props) {
     setExpanded(!expanded);
   };
   return (
-    <Link
-      className=" hover:scale-105
-       transition-all duration-500 delay-200 cursor-pointer "
-      href={`/writer/${props.id}`}
-    >
-      <Card sx={{ maxWidth: 345, bgcolor: "#3C4048" }}>
-        <CardHeader className="text-white" title={props.name} />
-        <CardMedia
-          component="img"
-          height="140"
-          image={`${
+    <Link href={`/writer/${props.id}`}>
+      <Card
+        sx={{
+          width: 250,
+          maxHeight: 330,
+          padding: "5px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          cursor: "pointer",
+          "&:hover": {
+            boxShadow: "1px 1px 20px 1px black",
+          },
+        }}
+      >
+        <CardHeader className='text-white' title={props.name} />
+        <Image
+          className='object-fill rounded-xl'
+          component='img'
+          height={200}
+          width={200}
+          src={`${
             props.image
               ? `http://localhost:4000/${props.image}`
               : "/images/pro.png"
@@ -44,7 +48,19 @@ function UserCard(props) {
           alt={props.name}
         />
         <CardContent>
-          <Typography variant="body2">{props.bio}</Typography>
+          <Rating
+            name='half-rating-read'
+            defaultValue={props.score}
+            precision={0.5}
+            readOnly
+          />
+          <Box
+            sx={{
+              height: 10,
+            }}
+          >
+            <Typography variant='body2'>{props.bio}</Typography>
+          </Box>
         </CardContent>
       </Card>
     </Link>

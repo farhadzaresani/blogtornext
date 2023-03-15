@@ -1,12 +1,12 @@
 .navbar {
-  @apply fixed bottom-0  bg-cream/90 border-b-[1px] border-charocoal shadow-lg  transition-all 
+  @apply fixed bottom-0   border-b-[1px] shadow-lg  transition-all 
   duration-500 delay-200
    w-full flex  z-10 justify-center items-center py-1 md:py-0 
   md:sticky md:top-0 md:flex-row md:justify-between md:px-10;
 }
 .navItem {
   @apply flex justify-center items-center my-2 mx-1  p-4 font-extrabold shadow-2xl 
-   uppercase text-charocoal bg-tan/40 rounded-md 
+   uppercase   rounded-md 
   hover:opacity-60 transition-opacity duration-300;
 }
 

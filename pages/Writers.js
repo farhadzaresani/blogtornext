@@ -2,7 +2,7 @@ import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import UserCard from "../components/user/UserCard";
 import { getUsersData } from "../lib/API's";
 import ImageLoader from "../components/loader/ImageLoader";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export async function getServerSideProps(context) {
   const queryClient = new QueryClient();
@@ -25,11 +25,31 @@ const Writers = (props) => {
   return (
     <Box
       sx={{
-        height: "100vh",
+        height: "100%",
+        padding: 2,
       }}
     >
-      <h1 className='uppercase font-bold text-2xl m-10'>Writers</h1>
-      <div className='flex flex-wrap justify-center gap-10 m-10'>
+      <Typography
+        sx={{
+          fontWeight: "bold",
+          fontSize: "2em",
+          margin: 4,
+          textTransform: "uppercase",
+        }}
+      >
+        Writers
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "wrap",
+          justifyContent: "center",
+          gap: 10,
+          margin: 10,
+          flexFlow: "wrap",
+        }}
+        //  className='flex flex-wrap justify-center gap-10 m-10 h-[100%]'
+      >
         {data.map((user, i) => {
           return (
             <UserCard
@@ -41,7 +61,7 @@ const Writers = (props) => {
             />
           );
         })}
-      </div>
+      </Box>
     </Box>
   );
 };

@@ -3,10 +3,16 @@ import React from "react";
 import UserCard from "../user/UserCard";
 import { InView } from "react-intersection-observer";
 import { useState } from "react";
+import ImageLoader from "../loader/ImageLoader";
 
 const TopWriters = ({ users }) => {
   const [animate, setAnimate] = useState(false);
 
+  console.log("users", users);
+
+  if (users.isRefetching) {
+    return <ImageLoader />;
+  }
   return (
     <InView
       threshold={0.2}
@@ -28,7 +34,7 @@ const TopWriters = ({ users }) => {
           alignItems: "center",
         }}
       >
-        <Box className=''>
+        <Box>
           <Typography
             variant='h1'
             sx={{
@@ -36,7 +42,8 @@ const TopWriters = ({ users }) => {
               transitionDuration: "2s",
               fontWeight: "bold",
               fontSize: { xs: "1.5em", sm: "2em" },
-              margin: "10px 0",
+              margin: "20px",
+              opacity: ".7",
             }}
           >
             Top Writers
@@ -55,7 +62,7 @@ const TopWriters = ({ users }) => {
           }}
         >
           {users.data &&
-            users?.data?.map((user, i) => {
+            users.data.map((user, i) => {
               return (
                 <Box
                   key={i}

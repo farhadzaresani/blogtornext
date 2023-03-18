@@ -1,5 +1,6 @@
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
+  Box,
   Button,
   Card,
   FormControl,
@@ -8,6 +9,7 @@ import {
   InputLabel,
   OutlinedInput,
   Paper,
+  Typography,
 } from "@mui/material";
 import React from "react";
 
@@ -26,13 +28,38 @@ const LoginSignup = (props) => {
   };
 
   return (
-    <div className=' flex min-h-[80vh] h-full w-full'>
+    <Box
+      sx={{
+        display: "flex",
+      }}
+    >
       <Card
-        className='m-auto   rounded-md  py-10 px-5 flex flex-col
-       gap-10 font-bold  justify-center items-center'
+        sx={{
+          margin: "auto",
+          padding: 6,
+          display: "flex",
+          flexDirection: "column",
+          gap: 8,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
       >
-        <h1 className='text-2xl  opacity-80'>{props.title}</h1>
-        <div className='flex flex-col gap-5'>
+        <Typography
+          variant='h1'
+          sx={{
+            fontSize: "2em",
+            opacity: 0.8,
+          }}
+        >
+          {props.title}
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 3,
+          }}
+        >
           <FormControl variant='outlined'>
             <InputLabel htmlFor='outlined-adornment-password'>
               {props.firstLabel}
@@ -50,7 +77,12 @@ const LoginSignup = (props) => {
               label='username'
             />
           </FormControl>
-          <div className='flex  justify-between'>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
             {props.title === "Login" ? (
               <>
                 <FormControl variant='outlined'>
@@ -102,27 +134,33 @@ const LoginSignup = (props) => {
                 />
               </FormControl>
             )}
-          </div>
-          <p
+          </Box>
+          <Typography
+            variant='p'
             onClick={props.isLoginHandler}
-            className='text-xs cursor-pointer hover:text-blue'
+            sx={{
+              fontSize: "0.75em",
+              cursor: "pointer",
+              "&:hover": {
+                color: "blue",
+              },
+            }}
           >
             {props.isLogin}
-          </p>
-        </div>
+          </Typography>
+        </Box>
 
-        <div>
+        <Box>
           <Button
-            sx={{ bgcolor: "#FF8A65" }}
-            // color='#FF8A65'
+            sx={{ color: "#FF8A65" }}
             onClick={() => props.submitHandler()}
             variant='contained'
           >
             {props.clickTitle}
           </Button>
-        </div>
+        </Box>
       </Card>
-    </div>
+    </Box>
   );
 };
 

@@ -36,7 +36,8 @@ const TopBlogs = ({ blogs }) => {
               transitionDuration: "2s",
               fontWeight: "bold",
               fontSize: "2em",
-              margin: "10px 0",
+              margin: "20px",
+              opacity: ".8",
             }}
           >
             Top Blogs

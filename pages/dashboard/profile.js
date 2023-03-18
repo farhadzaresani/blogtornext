@@ -1,16 +1,8 @@
 "use Clinet";
 import React, { useEffect, useState } from "react";
-import { setUser, thisUser } from "../../reducers/userReducer";
-import { useDispatch, useSelector } from "react-redux";
 import ProfileHero from "../../components/profile/ProfileHero";
-import { useRouter } from "next/router";
 import EditModal from "../../components/profile/EditModal";
-import {
-  dehydrate,
-  QueryClient,
-  useMutation,
-  useQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { getCookie } from "cookies-next";
 import ImageLoader from "../../components/loader/ImageLoader";
@@ -23,13 +15,12 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import { useMemo } from "react";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
     <div
-      role="tabpanel"
+      role='tabpanel'
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
@@ -49,27 +40,12 @@ TabPanel.propTypes = {
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
 };
-
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
-
-export async function getServerSideProps({ req, res }) {
-  const token = getCookie("ut", { req, res });
-  const queryClient = new QueryClient();
-  await queryClient.fetchQuery(["posts", token], () => getMyBlogs(token));
-  await queryClient.fetchQuery(["data", token], () => getMe(token));
-  // const posts = await getMyBlogs(token);
-  // const data = await getMe(token);
-
-  return {
-    props: { dehydratedState: dehydrate(queryClient) },
-  };
-}
-
 const profile = (props) => {
   //get my blogs
   const posts = useQuery({
@@ -113,6 +89,7 @@ const profile = (props) => {
       console.log(res);
       // getMyData.mutate(cookie);
       setOnEditProfile(false);
+      userData.refetch(token);
     },
   });
 
@@ -187,14 +164,6 @@ const profile = (props) => {
       setOnedit(false);
     },
   });
-  // const redux = useSelector(thisUser);
-  // console.log("thisuser", redux);
-  // useEffect(() => {
-  //   if (userData.data && userData.data !== newData) {
-  //     setNewData({ name: userData.data.name, bio: userData.data.bio });
-  //   }
-  // }, []);
-
   console.log("new", posts.data);
   if (posts.isLoading || userData.isLoading) {
     return <ImageLoader />;
@@ -206,10 +175,10 @@ const profile = (props) => {
           <Tabs
             value={value}
             onChange={handleChange}
-            aria-label="basic tabs example"
+            aria-label='basic tabs example'
           >
-            <Tab label="Profile" {...a11yProps(0)} />
-            <Tab label="Create Blog" {...a11yProps(1)} />
+            <Tab label='Profile' {...a11yProps(0)} />
+            <Tab label='Create Blog' {...a11yProps(1)} />
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
@@ -223,7 +192,17 @@ const profile = (props) => {
             onEdit={() => setOnEditProfile(true)}
             logedIn={true}
           />
-          <div className=" m-12 items-center justify-around flex flex-wrap gap-12  ">
+          <Box
+            sx={{
+              margin: 10,
+              display: "flex",
+              flexDirection: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 10,
+            }}
+            // className=' m-12 items-center justify-around flex flex-wrap gap-12  '
+          >
             {posts.data.length > 0 ? (
               posts.data.map((blog, i) => {
                 return (
@@ -242,11 +221,18 @@ const profile = (props) => {
                 );
               })
             ) : (
-              <h1 className="text-2xl font-extrabold text-[#3C4048]/50 ">
+              <Typography
+                variant='h4'
+                sx={{
+                  fontWeight: "bolder",
+                  opacity: ".2",
+                }}
+                // className='text-2xl font-extrabold text-[#3C4048]/50 '
+              >
                 There is no post
-              </h1>
+              </Typography>
             )}
-          </div>
+          </Box>
         </TabPanel>
         <TabPanel value={value} index={1}>
           <CreateBlog

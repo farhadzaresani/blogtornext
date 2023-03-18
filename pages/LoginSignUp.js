@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useMutation } from "@tanstack/react-query";
 import ImageLoader from "../components/loader/ImageLoader";
 import { useDispatch } from "react-redux";
+import { Box } from "@mui/material";
 
 const LoginSignUp = () => {
   const [isCreated, setIsCreated] = useState(true);
@@ -41,7 +42,14 @@ const LoginSignUp = () => {
   //   return <ImageLoader />;
   // }
   return (
-    <div>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
       {isCreated ? (
         <LoginSignup
           title={"Login"}
@@ -67,7 +75,7 @@ const LoginSignUp = () => {
           submitHandler={() => mutationSignup.mutate(userData)}
         />
       )}
-    </div>
+    </Box>
   );
 };
 export default LoginSignUp;

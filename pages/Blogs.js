@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import { QueryClient, useQuery, dehydrate } from "@tanstack/react-query";
 import React from "react";
 import BCard from "../components/blog/BCard";
@@ -19,19 +20,46 @@ const Blogs = (props) => {
   });
 
   return (
-    <div className="flex flex-wrap col-span-2 justify-center gap-10 m-10">
-      {data.map((blog, i) => {
-        return (
-          <BCard
-            key={i}
-            image={blog.imgurl}
-            content={blog.content}
-            name={blog.title}
-            id={blog._id}
-          />
-        );
-      })}
-    </div>
+    <Box
+      sx={{
+        height: "100%",
+        padding: 2,
+      }}
+    >
+      <Typography
+        sx={{
+          fontWeight: "bold",
+          fontSize: "2em",
+          margin: 4,
+          textTransform: "uppercase",
+        }}
+      >
+        Blogs
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "wrap",
+          justifyContent: "center",
+          gap: 10,
+          margin: 10,
+          flexFlow: "wrap",
+        }}
+        //  className='flex flex-wrap justify-center gap-10 m-10 h-[100%]'
+      >
+        {data.map((blog, i) => {
+          return (
+            <BCard
+              key={i}
+              image={blog.imgurl}
+              content={blog.content}
+              name={blog.title}
+              id={blog._id}
+            />
+          );
+        })}
+      </Box>
+    </Box>
   );
 };
 

@@ -11,6 +11,7 @@ import Navbar from "../components/layouts/Navbar";
 import Head from "next/head";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Footer from "../components/layouts/Footer";
+import { Box } from "@mui/system";
 
 const theme = createTheme({
   palette: {
@@ -39,11 +40,19 @@ function MyApp({ Component, pageProps }) {
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
             <ThemeProvider theme={theme}>
-              <main>
+              <Box
+                sx={{
+                  height: "100vh",
+                  overflowY: "auto",
+                  scrollSnapType: " x mandatory",
+                }}
+              >
                 <Navbar />
-                <Component {...pageProps} />
+                <main>
+                  <Component {...pageProps} />
+                </main>
                 <Footer />
-              </main>
+              </Box>
             </ThemeProvider>
           </Hydrate>
         </QueryClientProvider>

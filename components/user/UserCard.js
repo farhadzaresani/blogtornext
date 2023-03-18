@@ -35,18 +35,30 @@ function UserCard(props) {
         }}
       >
         <CardHeader className='text-white' title={props.name} />
-        <Image
-          className='object-fill rounded-xl'
-          component='img'
-          height={200}
-          width={200}
-          src={`${
-            props.image
-              ? `http://localhost:4000/${props.image}`
-              : "/images/pro.png"
-          }`}
-          alt={props.name}
-        />
+        <Box
+          sx={{
+            width: "200px",
+            height: "200px",
+          }}
+        >
+          <Image
+            style={{
+              objectFit: "cover",
+              borderRadius: "10%",
+              width: "200px",
+              height: "200px",
+            }}
+            component='img'
+            height={200}
+            width={200}
+            src={`${
+              props.image
+                ? `http://localhost:4000/${props.image}`
+                : "/images/pro.png"
+            }`}
+            alt={props.name}
+          />
+        </Box>
         <CardContent>
           <Rating
             name='half-rating-read'

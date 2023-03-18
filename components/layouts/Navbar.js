@@ -49,6 +49,7 @@ const Navbar = () => {
   const [isLogedIn, setIsLogedIn] = useState(false);
   const thisUser = useSelector(selectUser);
   const [open, setOpen] = useState(false);
+  const auth = hasCookie("ut");
   const SignOut = () => {
     deleteCookie("ut", {});
     setIsLogedIn(false);
@@ -56,11 +57,10 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    const auth = hasCookie("ut");
     if (auth) {
       setIsLogedIn(true);
     }
-  }, []);
+  }, [auth]);
 
   const goToPage = (address) => {
     route.push(address);

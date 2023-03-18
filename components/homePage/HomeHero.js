@@ -66,7 +66,7 @@ const HomeHero = () => {
               fontSize: { xs: "2em", sm: "3.5em" },
             }}
           >
-            Crate Your Own Blog!
+            Create Your Own Blog!
           </Typography>
 
           <Typography

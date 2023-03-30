@@ -27,6 +27,7 @@ const Writers = (props) => {
       sx={{
         height: "100%",
         padding: 2,
+        boxShadow: "0 4px 2px -2px gray",
       }}
     >
       <Typography
@@ -58,6 +59,7 @@ const Writers = (props) => {
               name={user.name}
               bio={user.bio}
               id={user._id}
+              score={user.averageScore}
             />
           );
         })}

@@ -11,6 +11,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
+import { Blogger } from "iconsax-react";
 import React from "react";
 
 const LoginSignup = (props) => {
@@ -31,12 +32,16 @@ const LoginSignup = (props) => {
     <Box
       sx={{
         display: "flex",
+        margin: { xs: 4, md: 0 },
       }}
     >
       <Card
         sx={{
           margin: "auto",
-          padding: 6,
+          // padding: 6,
+          width: "23vw",
+          minWidth: "90%",
+          height: "67vh",
           display: "flex",
           flexDirection: "column",
           gap: 8,
@@ -61,9 +66,9 @@ const LoginSignup = (props) => {
           }}
         >
           <FormControl variant='outlined'>
-            <InputLabel htmlFor='outlined-adornment-password'>
+            {/* <InputLabel htmlFor='outlined-adornment-password'>
               {props.firstLabel}
-            </InputLabel>
+            </InputLabel> */}
             <OutlinedInput
               onChange={(e) =>
                 props.setUserData({
@@ -86,9 +91,9 @@ const LoginSignup = (props) => {
             {props.title === "Login" ? (
               <>
                 <FormControl variant='outlined'>
-                  <InputLabel htmlFor='outlined-adornment-password'>
+                  {/* <InputLabel htmlFor='outlined-adornment-username'>
                     {props.secondLabel}
-                  </InputLabel>
+                  </InputLabel> */}
                   <OutlinedInput
                     onChange={(e) =>
                       props.setUserData({
@@ -97,7 +102,7 @@ const LoginSignup = (props) => {
                       })
                     }
                     onKeyDown={enterKey}
-                    id='outlined-adornment-password'
+                    id='outlined-adornment-username'
                     type={showPassword ? "text" : "password"}
                     endAdornment={
                       <InputAdornment position='end'>
@@ -117,9 +122,9 @@ const LoginSignup = (props) => {
               </>
             ) : (
               <FormControl variant='outlined'>
-                <InputLabel htmlFor='outlined-adornment-password'>
+                {/* <InputLabel htmlFor='outlined-adornment-password'>
                   {props.secondLabel}
-                </InputLabel>
+                </InputLabel> */}
                 <OutlinedInput
                   onChange={(e) =>
                     props.setUserData({

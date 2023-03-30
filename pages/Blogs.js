@@ -24,6 +24,7 @@ const Blogs = (props) => {
       sx={{
         height: "100%",
         padding: 2,
+        boxShadow: "0 4px 2px -2px gray",
       }}
     >
       <Typography
@@ -55,6 +56,7 @@ const Blogs = (props) => {
               content={blog.content}
               name={blog.title}
               id={blog._id}
+              score={blog.averageScore}
             />
           );
         })}

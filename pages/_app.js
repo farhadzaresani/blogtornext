@@ -30,29 +30,15 @@ function MyApp({ Component, pageProps }) {
   const [queryClient] = React.useState(() => new QueryClient());
   return (
     <>
-      <Head>
-        <link
-          rel='stylesheet'
-          href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap'
-        />
-      </Head>
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
           <Hydrate state={pageProps.dehydratedState}>
             <ThemeProvider theme={theme}>
-              <Box
-                sx={{
-                  height: "100vh",
-                  overflowY: "auto",
-                  scrollSnapType: " x mandatory",
-                }}
-              >
-                <Navbar />
-                <main>
-                  <Component {...pageProps} />
-                </main>
-                <Footer />
-              </Box>
+              <Navbar />
+              <main>
+                <Component {...pageProps} />
+              </main>
+              <Footer />
             </ThemeProvider>
           </Hydrate>
         </QueryClientProvider>

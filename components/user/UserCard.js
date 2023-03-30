@@ -4,9 +4,7 @@ import Link from "next/link";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardContent from "@mui/material/CardContent";
-
 import Typography from "@mui/material/Typography";
-
 import { Rating } from "@mui/material";
 import { Box } from "@mui/system";
 // import { Scale } from "@mui/icons-material";
@@ -62,7 +60,8 @@ function UserCard(props) {
         <CardContent>
           <Rating
             name='half-rating-read'
-            defaultValue={props.score}
+            // defaultValue={props.score}
+            value={props.score}
             precision={0.5}
             readOnly
           />

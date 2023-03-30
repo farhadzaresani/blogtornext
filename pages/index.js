@@ -40,6 +40,7 @@ export default function Home(props) {
   if (blogs.isLoading || users.isLoading) {
     return <ImageLoader />;
   }
+
   return (
     <Box>
       <Head>

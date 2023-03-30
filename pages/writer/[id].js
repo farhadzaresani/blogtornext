@@ -1,3 +1,4 @@
+import { Box, Typography } from "@mui/material";
 import { dehydrate, QueryClient, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import BCard from "../../components/blog/BCard";
@@ -43,9 +44,9 @@ const id = (props) => {
   if (userData.isLoading || posts.isLoading) {
     return <ImageLoader />;
   }
-  console.log(posts.data);
+
   return (
-    <div>
+    <Box sx={{ minHeight: "100vh" }}>
       <ProfileHero
         username={userData.data.username}
         name={userData.data.name}
@@ -55,11 +56,21 @@ const id = (props) => {
         image={userData.data.avatar}
         logedIn={false}
       />
-      <div className=" m-12 items-center justify-around flex flex-wrap gap-12  ">
+      <Box
+        sx={{
+          margin: 8,
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: 5,
+        }}
+      >
         {posts.data.length > 0 ? (
           posts.data.map((blog, i) => {
             return (
               <BCard
+                id={blog._id}
                 key={i}
                 image={blog.imgurl}
                 content={blog.content}
@@ -68,12 +79,18 @@ const id = (props) => {
             );
           })
         ) : (
-          <h1 className="text-2xl font-extrabold text-[#3C4048]/50 ">
+          <Typography
+            variant='h4'
+            sx={{
+              fontWeight: "bolder",
+              opacity: "0.3",
+            }}
+          >
             There is no post
-          </h1>
+          </Typography>
         )}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

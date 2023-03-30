@@ -11,6 +11,7 @@ const ProfileHero = (props) => {
   return (
     <Container
       sx={{
+        bgcolor: "#121212",
         display: "flex",
         flexDirection: "column",
         position: "relative",
@@ -20,6 +21,7 @@ const ProfileHero = (props) => {
       <Box sx={{ marginX: "auto" }}>
         <Typography
           sx={{
+            color: "white",
             fontWeight: "bold",
             textTransform: "uppercase",
           }}
@@ -36,7 +38,7 @@ const ProfileHero = (props) => {
           style={{
             borderRadius: "100%",
             marginLeft: 2,
-            border: "1px solid black",
+            border: "2px solid #FF8A65",
             objectFit: "cover",
             width: "100px",
             height: "100px",
@@ -56,7 +58,9 @@ const ProfileHero = (props) => {
         {props.logedIn && (
           <Button
             onClick={props.onEdit}
+            color='success'
             sx={{
+              color: "white",
               margin: "10px 0",
             }}
           >
@@ -76,6 +80,7 @@ const ProfileHero = (props) => {
           <Typography
             variant='h4'
             sx={{
+              color: "white",
               fontWeight: "bold",
             }}
           >
@@ -84,6 +89,7 @@ const ProfileHero = (props) => {
           <Typography
             variant='p'
             sx={{
+              color: "white",
               margin: 2,
               opacity: ".5",
             }}
@@ -98,6 +104,7 @@ const ProfileHero = (props) => {
               opacity: ".5",
               display: "flex",
               gap: 1,
+              color: "white",
             }}
             // className='opacity-50 flex tracking-wider'
           >

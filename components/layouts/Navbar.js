@@ -15,7 +15,11 @@ import AdbIcon from "@mui/icons-material/Adb";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, setUser } from "../../reducers/userReducer";
+import {
+  removeUserData,
+  selectUser,
+  setUser,
+} from "../../reducers/userReducer";
 import styles from "./Navbar.module.css";
 import { ProfileCircle, Logout, HambergerMenu, Blogger } from "iconsax-react";
 import { deleteCookie, getCookie, hasCookie } from "cookies-next";
@@ -46,14 +50,19 @@ const Navbar = () => {
   };
 
   const route = useRouter();
+  const dispatch = useDispatch();
   const [isLogedIn, setIsLogedIn] = useState(false);
   const thisUser = useSelector(selectUser);
+  console.log("thisuser", thisUser);
   const [open, setOpen] = useState(false);
   const auth = hasCookie("ut");
   const SignOut = () => {
     deleteCookie("ut", {});
     setIsLogedIn(false);
     route.push("/");
+    handleCloseNavMenu();
+    handleCloseUserMenu();
+    dispatch(removeUserData);
   };
 
   useEffect(() => {
@@ -169,7 +178,10 @@ const Navbar = () => {
             {isLogedIn ? (
               <Tooltip>
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt='Remy Sharp' src='/static/images/avatar/2.jpg' />
+                  <Avatar
+                    alt={thisUser.name}
+                    src={`http://localhost:4000/${thisUser.avatar}`}
+                  />
                 </IconButton>
               </Tooltip>
             ) : (

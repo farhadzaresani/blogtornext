@@ -15,6 +15,11 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, setUser } from "../../reducers/userReducer";
+import { Fab, Paper } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import { useRouter } from "next/router";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -46,7 +51,22 @@ function a11yProps(index) {
     "aria-controls": `simple-tabpanel-${index}`,
   };
 }
+
 const profile = (props) => {
+  const route = useRouter();
+  const goToPage = (address) => {
+    route.push(address);
+  };
+  const cookie = getCookie("ut");
+  const [onEditProfile, setOnEditProfile] = useState(false);
+  const [onEdit, setOnedit] = useState(false);
+  const [newData, setNewData] = useState({
+    name: "",
+    bio: "",
+  });
+  const reduxStore = useSelector(selectUser);
+  const dispatch = useDispatch();
+
   //get my blogs
   const posts = useQuery({
     queryFn: () => getMyBlogs(cookie),
@@ -57,23 +77,16 @@ const profile = (props) => {
   const userData = useQuery({
     queryFn: () => getMe(cookie),
     queryKey: ["data"],
+    onSuccess: (res) => {
+      dispatch(setUser(res));
+    },
   });
-  const cookie = getCookie("ut");
-  const [value, setValue] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  const [onEditProfile, setOnEditProfile] = useState(false);
-  const [onEdit, setOnedit] = useState(false);
-  const [openCreateModal, setOpenCreateModal] = useState(false);
-  const [newData, setNewData] = useState({
-    name: "",
-    bio: "",
-  });
   useEffect(() => {
+    console.log(userData.data);
     if (userData.data) {
       setNewData({ name: userData.data.name, bio: userData.data.bio });
+      // dispatch(setUser(userData.data));
     }
   }, [userData.data]);
   const [newAvatar, setNewAvatar] = useState(null);
@@ -86,15 +99,12 @@ const profile = (props) => {
       });
     },
     onSuccess: (res) => {
-      console.log(res);
+      // console.log(res);
       // getMyData.mutate(cookie);
       setOnEditProfile(false);
       userData.refetch(token);
     },
   });
-
-  // const catchedData = useMemo(userData.data, []);
-  console.log(userData.data);
 
   //update profile picture
   const uploadAvatar = useMutation({
@@ -108,7 +118,7 @@ const profile = (props) => {
       );
     },
     onSuccess: (res) => {
-      console.log(res);
+      // console.log(res);
       // getMyData.mutate(cookie);
       setOnEditProfile(false);
     },
@@ -122,25 +132,6 @@ const profile = (props) => {
     formData.append("avatar", data);
     uploadAvatar.mutate(formData);
   };
-
-  //create new blog
-  const [blogData, setBlogData] = useState({
-    title: "",
-    content: "",
-    imgurl: "/images/article.png",
-  });
-
-  const createBlog = useMutation({
-    mutationFn: async (data) => {
-      return await axios.post("http://localhost:4000/blog/write", data, {
-        headers: { auth: `ut ${cookie}` },
-      });
-    },
-    onSuccess: (res) => {
-      console.log("succses", res);
-      setOpenCreateModal(false);
-    },
-  });
 
   const editBlog = useMutation({
     mutationFn: async (data) => {
@@ -160,28 +151,19 @@ const profile = (props) => {
       });
     },
     onSuccess: (res) => {
-      console.log(res);
+      // console.log(res);
       setOnedit(false);
     },
   });
-  console.log("new", posts.data);
+  // console.log("new", posts.data);
   if (posts.isLoading || userData.isLoading) {
     return <ImageLoader />;
   }
   return (
     <>
       <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label='basic tabs example'
-          >
-            <Tab label='Profile' {...a11yProps(0)} />
-            <Tab label='Create Blog' {...a11yProps(1)} />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider" }}></Box>
+        <Box>
           <ProfileHero
             username={userData.data.username}
             name={userData.data.name}
@@ -192,59 +174,67 @@ const profile = (props) => {
             onEdit={() => setOnEditProfile(true)}
             logedIn={true}
           />
-          <Box
-            sx={{
-              margin: 10,
-              display: "flex",
-              flexDirection: "wrap",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 10,
-            }}
-            // className=' m-12 items-center justify-around flex flex-wrap gap-12  '
+        </Box>
+        <Box
+          color={"primary"}
+          sx={{ "& > :not(style)": { m: 1 }, paddingX: 20 }}
+        >
+          <Fab
+            onClick={() => goToPage("createBlogPage")}
+            color='success'
+            variant='extended'
           >
-            {posts.data.length > 0 ? (
-              posts.data.map((blog, i) => {
-                return (
-                  <BCard
-                    key={i}
-                    image={blog.imgurl}
-                    content={blog.content}
-                    name={blog.title}
-                    id={blog._id}
-                    isLogedIn={true}
-                    setOnedit={setOnedit}
-                    onEdit={onEdit}
-                    editBlog={editBlog}
-                    deleteBlog={deleteBlog}
-                  />
-                );
-              })
-            ) : (
-              <Typography
-                variant='h4'
-                sx={{
-                  fontWeight: "bolder",
-                  opacity: ".2",
-                }}
-                // className='text-2xl font-extrabold text-[#3C4048]/50 '
-              >
-                There is no post
-              </Typography>
-            )}
-          </Box>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <CreateBlog
-            title={(e) => setBlogData({ ...blogData, title: e.target.value })}
-            content={(e) =>
-              setBlogData({ ...blogData, content: e.target.value })
-            }
-            action={() => createBlog.mutate(blogData)}
-            closeModal={setOpenCreateModal}
-            discription={"Create new blog!"}
-          />
-        </TabPanel>
+            <AddIcon />
+            Crate Blog
+          </Fab>
+        </Box>
+        <Box
+          sx={{
+            marginTop: 10,
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 5,
+          }}
+        >
+          {posts.data.length > 0 ? (
+            posts.data.map((blog, i) => {
+              return (
+                <BCard
+                  key={i}
+                  image={blog.imgurl}
+                  content={blog.content}
+                  name={blog.title}
+                  id={blog._id}
+                  isLogedIn={true}
+                  setOnedit={setOnedit}
+                  onEdit={onEdit}
+                  editBlog={editBlog}
+                  deleteBlog={deleteBlog}
+                />
+              );
+            })
+          ) : (
+            <Typography
+              variant='h4'
+              sx={{
+                fontWeight: "bolder",
+                opacity: ".2",
+                margin: "auto",
+              }}
+            >
+              There is no post
+            </Typography>
+          )}
+        </Box>
+        {/* <CreateBlog
+          title={(e) => setBlogData({ ...blogData, title: e.target.value })}
+          content={(e) => setBlogData({ ...blogData, content: e.target.value })}
+          action={() => createBlog.mutate(blogData)}
+          closeModal={setOpenCreateModal}
+          discription={"Create new blog!"}
+        /> */}
       </Box>
 
       <EditModal
@@ -259,21 +249,6 @@ const profile = (props) => {
         image={userData.data.avatar}
       />
     </>
-    // <div>
-
-    //   <button
-    //     onClick={() => setOpenCreateModal(true)}
-    //     className="bg-green/70 hover:bg-green transition-all duration-300
-    //    uppercase font-bold px-3 py-1 rounded-md flex m-4 text-charocoal "
-    //   >
-    //     Create new blog
-    //     <Add size="22" variant="Bold" />
-    //   </button>
-
-    //   <div className=" m-12 items-center justify-around flex flex-wrap gap-12  ">
-
-    //   </div>
-    // </div>
   );
 };
 export default profile;

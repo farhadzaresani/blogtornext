@@ -1,5 +1,4 @@
 import {
-  hydrate,
   QueryClient,
   useMutation,
   useQuery,
@@ -12,12 +11,11 @@ import {
   getSingleBlogData,
 } from "../../lib/API's";
 import { useEffect, useState } from "react";
-import { Button, Rating } from "@mui/material";
+import { Button, Rating, Typography, Box, Container } from "@mui/material";
 import axios from "axios";
 import { getCookie, hasCookie } from "cookies-next";
 import CommentSection from "../../components/blog/CommentSection";
 import { useRouter } from "next/router";
-import { Box, Container } from "@mui/material";
 
 export async function getStaticPaths() {
   const blogs = await getAllBlogs();
@@ -37,9 +35,9 @@ export async function getStaticProps({ params }) {
   const { id } = params;
   const queryClient = new QueryClient();
   await queryClient.fetchQuery(["data", id], () => getSingleBlogData(id));
-  await queryClient.fetchQuery(["comment", id], () =>
-    getSingleBlogComments(id)
-  );
+  // await queryClient.fetchQuery(["comment", id], () =>
+  //   getSingleBlogComments(id)
+  // );
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
@@ -106,6 +104,7 @@ const id = (props) => {
     },
     onSuccess: (res) => {
       console.log(res);
+      comments.refetch();
       setNewComment("");
     },
     onError: (err) => {
@@ -116,42 +115,78 @@ const id = (props) => {
   if (comments.isLoading || blog.isLoading) {
     return <ImageLoader />;
   }
-  console.log("cm", comments);
-  // console.log(comments.data);
-  // console.log(blog.data);
 
   return (
     <>
-      <Box className="bg-[#3C4048]  m-5 p-5 pb-0 rounded-md ">
-        <Container className="p-4 text-black bg-white/70 rounded-lg">
-          <h1 className="font-bold  m-4">{blog.data.title}</h1>
-          <div></div>
-          <p className="">{blog.data.content}</p>
-        </Container>
-        <Container className="border-t-[1px] pt-2 mt-2 border-[#eeee]">
-          <Box className="flex  items-center">
-            <Rating
-              name="half-rating-read"
-              defaultValue={props.score}
-              precision={0.5}
-              onChange={(e, value) => {
-                setRateNum(value);
-              }}
-            />
-            <Button
-              onClick={() => rateBlog.mutate(rateNum)}
-              className="bg-blue hover:bg-blue/80 text-white active:bg-green"
+      <Container
+        sx={{
+          minHeight: "100vh",
+          marginTop: 5,
+          boxShadow: "0 4px 2px -2px gray",
+          paddingBottom: 3,
+        }}
+      >
+        <Box
+          sx={{
+            bgcolor: "white",
+            paddingX: 4,
+            paddingY: 2,
+            borderRadius: "3px",
+            boxShadow: "0 4px 2px -2px gray",
+            minHeight: "60vh",
+          }}
+        >
+          <Typography
+            sx={{
+              fontWeight: "bold",
+              margin: 1,
+            }}
+          >
+            {blog.data.title}
+          </Typography>
+
+          <Typography variant='p'>{blog.data.content}</Typography>
+        </Box>
+        <Box
+          sx={{
+            marginTop: 2,
+          }}
+        >
+          {cookie && (
+            <Box
+              sx={{ display: "flex", alignItems: "center", margin: 1 }}
+
+              // className='flex  items-center'
             >
-              Rate
-            </Button>
-          </Box>
+              <Rating
+                name='half-rating-read'
+                defaultValue={props.score}
+                precision={0.5}
+                onChange={(e, value) => {
+                  setRateNum(value);
+                }}
+              />
+              <Button
+                onClick={() => rateBlog.mutate(rateNum)}
+                // disabled={`${cookie ? "false" : "true"}`}
+                color='warning'
+                size='small'
+                variant='text'
+                // className='bg-blue hover:bg-blue/80 text-white active:bg-green'
+              >
+                Rate
+              </Button>
+            </Box>
+          )}
           <CommentSection
+            cookie={cookie}
             setNewComment={setNewComment}
+            newComment={newComment}
             post={() => enterComment.mutate(newComment)}
             comments={comments.data}
           />
-        </Container>
-      </Box>
+        </Box>
+      </Container>
     </>
   );
 };
